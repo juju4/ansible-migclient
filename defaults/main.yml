@@ -1,0 +1,10 @@
+---
+
+### client
+mig_src: "{{ mig_gopath }}/src/mig.ninja/mig"
+mig_agent_bin: "{{ mig_src }}/{{ ansible_os_family }}/{{ ansible_architecture }}/mig-agent-latest"
+mig_api_host: localhost
+mig_api_port: 51664
+#mig_path:
+
+
