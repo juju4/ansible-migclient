@@ -1,10 +1,13 @@
 ---
 
 ### client
+mig_user: "_mig"
+mig_gopath: "/home/{{ mig_user }}/go"
 mig_src: "{{ mig_gopath }}/src/mig.ninja/mig"
 mig_agent_bin: "{{ mig_src }}/{{ ansible_os_family }}/{{ ansible_architecture }}/mig-agent-latest"
+## IP/Hostname of server
 mig_api_host: localhost
-mig_api_port: 51664
+mig_api_port: 1664
 #mig_path:
-
+mig_servername: ansibleinventory_servername
 

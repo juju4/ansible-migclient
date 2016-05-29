@@ -40,7 +40,7 @@ mig_api_port: 51664
 
 ## Continuous integration
 
-...
+(not done, need the server)
 
 
 ## Troubleshooting & Known issues
