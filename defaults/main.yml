@@ -9,5 +9,7 @@ mig_agent_bin: "{{ mig_src }}/{{ ansible_os_family }}/{{ ansible_architecture }}
 mig_api_host: localhost
 mig_api_port: 1664
 #mig_path:
+
+## either mig server (unique server), either build server (multi-tiers)
 mig_servername: ansibleinventory_servername
 
