@@ -5,5 +5,5 @@
 #  vars:
 #    - a:
   roles:
-    - migclient
+    - juju4.migclient
 
