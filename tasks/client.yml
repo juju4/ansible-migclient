@@ -1,10 +1,9 @@
 ---
 
-- include: supervisor-env.yml
 - include: debian.yml
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 - include: redhat.yml
-  when: (ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
+  when: (ansible_os_family == "RedHat")
 
 - name: decide mig_arch
   set_fact:
@@ -33,7 +32,7 @@
 - set_fact:
     mig_agent_pkg: "{{ mig_src }}/mig-agent-latest-{{ ansible_architecture }}.rpm"
     mig_agent_cfg: "{{ mig_src }}/conf/mig-agent.cfg"
-  when: (ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
+  when: (ansible_os_family == "RedHat")
 
 - block:
     - name: retrieve mig-agent archive if remote on orchestrator
@@ -48,10 +47,10 @@
         - /etc/mig/ca.crt
       delegate_to: "{{ mig_servername }}"
     - name: push mig-agent on host
-      copy: "src=tmp/{{ mig_agent_pkg | basename }} dest=/root/{{ mig_agent_pkg | basename }} mode=644"
+      copy: "src=tmp/{{ mig_agent_pkg | basename }} dest=/root/{{ mig_agent_pkg | basename }} mode=0644"
       when: mig_api_host != 'localhost'
     - name: push mig cfg on host
-      copy: "src=tmp/{{ item }} dest=/root/{{ item }} mode=400"
+      copy: "src=tmp/{{ item }} dest=/root/{{ item }} mode=0400"
       with_items:
         - "{{ mig_agent_cfg | basename }}"
         - agent.key
@@ -65,9 +64,13 @@
 ## FIXME! handle package update? latest not supported for pkg file
 - name: apt | mig-agent install
   apt: deb="{{ mig_agent_pkg }}" state=present
+  register: pkg_result
+  until: pkg_result is success
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 - name: yum | mig-agent install
   yum: name="{{ mig_agent_pkg }}" state=present
+  register: pkg_result
+  until: pkg_result is success
   when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 ## debian /agent_install.sh
@@ -103,5 +106,3 @@
   template: src=supervisord-migagent.ini dest={{ supervisor_confdir }}/migagent.{{ supervisor_ext }} mode=0644
   notify:
     - restart supervisor
-
-

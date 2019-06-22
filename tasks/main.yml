@@ -1,4 +1,6 @@
 ---
 
-- include: client.yml
+- name: Include OS family variables
+  include_vars: "{{ ansible_os_family }}.yml"
 
+- include: client.yml

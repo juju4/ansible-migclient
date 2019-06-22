@@ -1,7 +1,6 @@
 ---
 
 - name: apt | MIG agent dependencies
-  apt: name={{item}} state=present
-  with_items:
-    - supervisor
-
+  apt: name=supervisor state=present
+  register: pkg_result
+  until: pkg_result is success
